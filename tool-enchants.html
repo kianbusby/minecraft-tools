@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Enchants - Minecraft Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2F4F2F;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .title-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 8px;
+        }
+
+        .back-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .tool-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tool-button {
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #A0522D;
+        }
+
+        .tool-button.active {
+            background: linear-gradient(145deg, #32CD32, #228B22);
+            border-color: #006400;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .tool-icon-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .tool-title {
+            color: #8B4513;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .select-message {
+            text-align: center;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .select-message.hidden {
+            display: none;
+        }
+
+        .enchantments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .tool-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .tool-image {
+            width: 80px;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        .tool-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .tool-info {
+            color: #2F4F2F;
+            text-align: left;
+        }
+
+        .tool-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .tool-description {
+            font-size: 1rem;
+            color: #654321;
+            line-height: 1.4;
+        }
+
+        .enchantment-card {
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enchantment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #A0522D;
+        }
+
+        .enchantment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .enchantment-icon-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .enchantment-name {
+            color: #8B4513;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .enchantment-level {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: #8B4513;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: auto;
+            border: 2px solid #B8860B;
+        }
+
+        .enchantment-description {
+            color: #654321;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-details {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #654321;
+        }
+
+        .rarity-common { border-left: 5px solid #808080; }
+        .rarity-uncommon { border-left: 5px solid #32CD32; }
+        .rarity-rare { border-left: 5px solid #4169E1; }
+        .rarity-epic { border-left: 5px solid #9932CC; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .title-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .tool-buttons {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tool-button {
+                padding: 25px;
+                min-height: 180px;
+            }
+            
+            .tool-icon {
+                font-size: 2.5rem;
+            }
+            
+            .tool-icon-img {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .tool-title {
+                font-size: 1.5rem;
+            }
+            
+            .tool-display {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .tool-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .tool-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="pvp-enchants.html" class="back-button">← Back to PvP Enchants</a>
+            <h1><img src="Enchanted_Netherite_Pickaxe.gif" alt="Enchanted Netherite Pickaxe" class="title-image"> Tool Enchantments</h1>
+        </div>
+
+        <div class="tool-buttons">
+            <button class="tool-button" data-tool="pickaxe">
+                <div class="tool-icon"><img src="Enchanted_Netherite_Pickaxe.gif" alt="Enchanted Netherite Pickaxe" class="tool-icon-img"></div>
+                <div class="tool-title">Pickaxe</div>
+            </button>
+
+            <button class="tool-button" data-tool="shovel">
+                <div class="tool-icon"><img src="Enchanted_Netherite_Shovel.gif" alt="Enchanted Netherite Shovel" class="tool-icon-img"></div>
+                <div class="tool-title">Shovel</div>
+            </button>
+
+            <button class="tool-button" data-tool="trident">
+                <div class="tool-icon"><img src="Enchanted_trident.webp" alt="Enchanted Trident" class="tool-icon-img"></div>
+                <div class="tool-title">Trident</div>
+            </button>
+        </div>
+
+        <div class="select-message" id="selectMessage">
+            <strong>🔧 Select a tool type above to see the best enchantments!</strong><br>
+            Choose from Pickaxe, Shovel, or Trident to view recommended enchantments.
+        </div>
+
+        <div class="tool-display" id="pickaxeDisplay" style="display: none;">
+            <div class="tool-image">
+                <img src="Enchanted_Netherite_Pickaxe.gif" alt="Enchanted Netherite Pickaxe">
+            </div>
+            <div class="tool-info">
+                <div class="tool-name">Enchanted Netherite Pickaxe</div>
+                <div class="tool-description">The ultimate mining tool with maximum efficiency and durability</div>
+            </div>
+        </div>
+
+        <div class="tool-display" id="shovelDisplay" style="display: none;">
+            <div class="tool-image">
+                <img src="Enchanted_Netherite_Shovel.gif" alt="Enchanted Netherite Shovel">
+            </div>
+            <div class="tool-info">
+                <div class="tool-name">Enchanted Netherite Shovel</div>
+                <div class="tool-description">The ultimate digging tool with maximum efficiency and durability</div>
+            </div>
+        </div>
+
+        <div class="tool-display" id="tridentDisplay" style="display: none;">
+            <div class="tool-image">
+                <img src="Enchanted_trident.webp" alt="Enchanted Trident">
+            </div>
+            <div class="tool-info">
+                <div class="tool-name">Enchanted Trident</div>
+                <div class="tool-description">Powerful ranged weapon with special enchantments</div>
+            </div>
+        </div>
+
+        <div class="enchantments-grid" id="enchantmentsGrid" style="display: none;">
+            <!-- Efficiency V -->
+            <div class="enchantment-card rarity-common" data-tool="pickaxe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">⚡</div>
+                    <div class="enchantment-name">Efficiency V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases mining speed significantly. 5x faster mining speed for efficient resource gathering.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Speed Increase:</span>
+                        <span class="detail-value">5x</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Pickaxe, Axe, Shovel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Silk Touch OR Fortune III -->
+            <div class="enchantment-card rarity-rare" data-tool="pickaxe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🕸️</div>
+                    <div class="enchantment-name">Silk Touch OR Fortune III</div>
+                    <div class="enchantment-level">I/III</div>
+                </div>
+                <div class="enchantment-description">
+                    <strong>Silk Touch:</strong> Allows you to mine blocks in their original form.<br>
+                    <strong>OR</strong><br>
+                    <strong>Fortune III:</strong> Increases ore drops significantly (3x more drops).
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Mutually Exclusive:</span>
+                        <span class="detail-value">Yes - Choose One</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Silk Touch Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fortune Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Pickaxe</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-tool="pickaxe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases pickaxe durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-tool="pickaxe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the pickaxe using experience orbs. Essential for maintaining your gear during mining.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Efficiency V -->
+            <div class="enchantment-card rarity-common" data-tool="shovel">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">⚡</div>
+                    <div class="enchantment-name">Efficiency V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases digging speed significantly. 5x faster digging speed for efficient terraforming.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Speed Increase:</span>
+                        <span class="detail-value">5x</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Pickaxe, Axe, Shovel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Silk Touch OR Fortune III -->
+            <div class="enchantment-card rarity-rare" data-tool="shovel">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🕸️</div>
+                    <div class="enchantment-name">Silk Touch OR Fortune III</div>
+                    <div class="enchantment-level">I/III</div>
+                </div>
+                <div class="enchantment-description">
+                    <strong>Silk Touch:</strong> Allows you to dig blocks in their original form.<br>
+                    <strong>OR</strong><br>
+                    <strong>Fortune III:</strong> Increases block drops significantly (3x more drops).
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Mutually Exclusive:</span>
+                        <span class="detail-value">Yes - Choose One</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Silk Touch Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fortune Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Shovel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-tool="shovel">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases shovel durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-tool="shovel">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the shovel using experience orbs. Essential for maintaining your gear during digging.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impaling V -->
+            <div class="enchantment-card rarity-rare" data-tool="trident">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔱</div>
+                    <div class="enchantment-name">Impaling V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases damage to aquatic mobs significantly. Deals 12.5 extra damage to water-based creatures.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Increase:</span>
+                        <span class="detail-value">+12.5 vs aquatic mobs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Trident</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Riptide III -->
+            <div class="enchantment-card rarity-rare" data-tool="trident">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🌊</div>
+                    <div class="enchantment-name">Riptide III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Launches the player forward when thrown in rain or water. Perfect for mobility and combat positioning.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Launch Distance:</span>
+                        <span class="detail-value">8 blocks</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Trident</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-tool="trident">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases trident durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-tool="trident">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the trident using experience orbs. Essential for maintaining your gear in combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Tools</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toolButtons = document.querySelectorAll('.tool-button');
+            const enchantmentCards = document.querySelectorAll('.enchantment-card');
+            const selectMessage = document.getElementById('selectMessage');
+            const enchantmentsGrid = document.getElementById('enchantmentsGrid');
+            const pickaxeDisplay = document.getElementById('pickaxeDisplay');
+            const shovelDisplay = document.getElementById('shovelDisplay');
+            const tridentDisplay = document.getElementById('tridentDisplay');
+
+            // Hide all enchantment cards by default
+            enchantmentCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            toolButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hide the select message
+                    selectMessage.classList.add('hidden');
+                    
+                    // Remove active class from all buttons
+                    toolButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const toolType = this.getAttribute('data-tool');
+
+                    // Show/hide tool displays based on selection
+                    if (toolType === 'pickaxe') {
+                        pickaxeDisplay.style.display = 'flex';
+                        shovelDisplay.style.display = 'none';
+                        tridentDisplay.style.display = 'none';
+                    } else if (toolType === 'shovel') {
+                        pickaxeDisplay.style.display = 'none';
+                        shovelDisplay.style.display = 'flex';
+                        tridentDisplay.style.display = 'none';
+                    } else if (toolType === 'trident') {
+                        pickaxeDisplay.style.display = 'none';
+                        shovelDisplay.style.display = 'none';
+                        tridentDisplay.style.display = 'flex';
+                    } else {
+                        pickaxeDisplay.style.display = 'none';
+                        shovelDisplay.style.display = 'none';
+                        tridentDisplay.style.display = 'none';
+                    }
+
+                    // Show enchantments grid
+                    enchantmentsGrid.style.display = 'grid';
+
+                    enchantmentCards.forEach(card => {
+                        const toolTypes = card.getAttribute('data-tool');
+                        if (toolTypes && toolTypes.includes(toolType)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Add some interactive effects
+            toolButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(-5px) scale(1.02)';
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

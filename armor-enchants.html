@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armor Enchants - Minecraft Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2F4F2F;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .title-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 8px;
+        }
+
+        .back-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .filter-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            border-color: #8B4513;
+        }
+
+        .filter-button.active {
+            background: linear-gradient(145deg, #32CD32, #228B22);
+            border-color: #006400;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        .filter-button.active:hover {
+            background: linear-gradient(145deg, #228B22, #32CD32);
+        }
+
+        .select-message {
+            text-align: center;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .select-message.hidden {
+            display: none;
+        }
+
+        .enchantments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .helmet-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .helmet-image {
+            width: 80px;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        .helmet-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .helmet-info {
+            color: #2F4F2F;
+            text-align: left;
+        }
+
+        .helmet-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .helmet-description {
+            font-size: 1rem;
+            color: #654321;
+            line-height: 1.4;
+        }
+
+        .enchantment-card {
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enchantment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #A0522D;
+        }
+
+        .enchantment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .enchantment-name {
+            color: #8B4513;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .enchantment-level {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: #8B4513;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: auto;
+            border: 2px solid #B8860B;
+        }
+
+        .enchantment-description {
+            color: #654321;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-details {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #654321;
+        }
+
+        .compatibility {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .compatibility-item {
+            background: linear-gradient(145deg, #90EE90, #98FB98);
+            color: #2F4F2F;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid #32CD32;
+        }
+
+        .rarity-common { border-left: 5px solid #808080; }
+        .rarity-uncommon { border-left: 5px solid #32CD32; }
+        .rarity-rare { border-left: 5px solid #4169E1; }
+        .rarity-epic { border-left: 5px solid #9932CC; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .title-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .filter-buttons {
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .filter-button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .helmet-display {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .helmet-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .helmet-name {
+                font-size: 1.5rem;
+            }
+            
+            .enchantments-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .enchantment-card {
+                padding: 20px;
+            }
+            
+            .enchantment-icon {
+                font-size: 2rem;
+            }
+            
+            .enchantment-name {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="pvp-enchants.html" class="back-button">← Back to PvP Enchants</a>
+            <h1><img src="full nethiret set.webp" alt="Full Netherite Armor Set" class="title-image"> Armor Enchantments</h1>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-button" data-filter="helmet">🪖 Helmet</button>
+            <button class="filter-button" data-filter="chestplate">🦺 Chestplate</button>
+            <button class="filter-button" data-filter="leggings">👖 Leggings</button>
+            <button class="filter-button" data-filter="boots">👢 Boots</button>
+        </div>
+
+        <div class="select-message" id="selectMessage">
+            <strong>🛡️ Select an armor type above to see the best enchantments!</strong><br>
+            Choose from Helmet, Chestplate, Leggings, or Boots to view recommended enchantments.
+        </div>
+
+        <div class="helmet-display" id="helmetDisplay" style="display: none;">
+            <div class="helmet-image">
+                <img src="Enchanted_Netherite_Helmet_(item).gif" alt="Enchanted Netherite Helmet">
+            </div>
+            <div class="helmet-info">
+                <div class="helmet-name">Netherite Helmet</div>
+                <div class="helmet-description">The ultimate helmet for PvP combat with maximum protection and durability</div>
+            </div>
+        </div>
+
+        <div class="helmet-display" id="chestplateDisplay" style="display: none;">
+            <div class="helmet-image">
+                <img src="Enchanted_Netherite_Chestplate_(item).gif" alt="Enchanted Netherite Chestplate">
+            </div>
+            <div class="helmet-info">
+                <div class="helmet-name">Netherite Chestplate</div>
+                <div class="helmet-description">The ultimate chestplate for PvP combat with maximum protection and durability</div>
+            </div>
+        </div>
+
+        <div class="helmet-display" id="leggingsDisplay" style="display: none;">
+            <div class="helmet-image">
+                <img src="Enchanted_Netherite_Leggings_(item).gif" alt="Enchanted Netherite Leggings">
+            </div>
+            <div class="helmet-info">
+                <div class="helmet-name">Netherite Leggings</div>
+                <div class="helmet-description">The ultimate leggings for PvP combat with maximum protection and durability</div>
+            </div>
+        </div>
+
+        <div class="helmet-display" id="bootsDisplay" style="display: none;">
+            <div class="helmet-image">
+                <img src="Enchanted_Netherite_Boots_(item).gif" alt="Enchanted Netherite Boots">
+            </div>
+            <div class="helmet-info">
+                <div class="helmet-name">Netherite Boots</div>
+                <div class="helmet-description">The ultimate boots for PvP combat with maximum protection and durability</div>
+            </div>
+        </div>
+
+        <div class="enchantments-grid">
+            <!-- Protection IV -->
+            <div class="enchantment-card rarity-common" data-armor="helmet">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🛡️</div>
+                    <div class="enchantment-name">Protection IV</div>
+                    <div class="enchantment-level">IV</div>
+                </div>
+                <div class="enchantment-description">
+                    Reduces damage from most sources by 16%. Essential for maximum protection in PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">IV (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Reduction:</span>
+                        <span class="detail-value">16%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Helmet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-armor="helmet">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases helmet durability significantly. 75% chance to not consume durability when taking damage.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Helmet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-armor="helmet">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the helmet using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Helmet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aqua Affinity -->
+            <div class="enchantment-card rarity-uncommon" data-armor="helmet">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🌊</div>
+                    <div class="enchantment-name">Aqua Affinity</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases mining speed underwater. Allows you to mine at normal speed while underwater, useful for underwater PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Effect:</span>
+                        <span class="detail-value">Normal mining speed underwater</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Helmet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Respiration III -->
+            <div class="enchantment-card rarity-uncommon" data-armor="helmet">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🫁</div>
+                    <div class="enchantment-name">Respiration III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Extends underwater breathing time significantly. Adds 45 seconds of underwater breathing time for extended underwater combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Breathing Time:</span>
+                        <span class="detail-value">+45 seconds</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Helmet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chestplate Protection IV -->
+            <div class="enchantment-card rarity-common" data-armor="chestplate">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🛡️</div>
+                    <div class="enchantment-name">Protection IV</div>
+                    <div class="enchantment-level">IV</div>
+                </div>
+                <div class="enchantment-description">
+                    Reduces damage from most sources by 16%. Essential for maximum protection in PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">IV (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Reduction:</span>
+                        <span class="detail-value">16%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Chestplate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chestplate Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-armor="chestplate">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases chestplate durability significantly. 75% chance to not consume durability when taking damage.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Chestplate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chestplate Mending -->
+            <div class="enchantment-card rarity-rare" data-armor="chestplate">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the chestplate using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Chestplate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leggings Protection IV -->
+            <div class="enchantment-card rarity-common" data-armor="leggings">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🛡️</div>
+                    <div class="enchantment-name">Protection IV</div>
+                    <div class="enchantment-level">IV</div>
+                </div>
+                <div class="enchantment-description">
+                    Reduces damage from most sources by 16%. Essential for maximum protection in PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">IV (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Reduction:</span>
+                        <span class="detail-value">16%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Leggings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leggings Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-armor="leggings">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases leggings durability significantly. 75% chance to not consume durability when taking damage.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Leggings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leggings Mending -->
+            <div class="enchantment-card rarity-rare" data-armor="leggings">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the leggings using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Leggings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swift Sneak III -->
+            <div class="enchantment-card rarity-rare" data-armor="leggings">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🏃</div>
+                    <div class="enchantment-name">Swift Sneak III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases sneaking speed significantly. 45% faster sneaking speed for stealthy PvP movement.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Sneak Speed:</span>
+                        <span class="detail-value">+45%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Leggings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boots Protection IV -->
+            <div class="enchantment-card rarity-common" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🛡️</div>
+                    <div class="enchantment-name">Protection IV</div>
+                    <div class="enchantment-level">IV</div>
+                </div>
+                <div class="enchantment-description">
+                    Reduces damage from most sources by 16%. Essential for maximum protection in PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">IV (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Reduction:</span>
+                        <span class="detail-value">16%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boots Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases boots durability significantly. 75% chance to not consume durability when taking damage.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boots Mending -->
+            <div class="enchantment-card rarity-rare" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the boots using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feather Falling IV -->
+            <div class="enchantment-card rarity-uncommon" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🪶</div>
+                    <div class="enchantment-name">Feather Falling IV</div>
+                    <div class="enchantment-level">IV</div>
+                </div>
+                <div class="enchantment-description">
+                    Reduces fall damage significantly. 48% fall damage reduction for safe landings in PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">IV (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fall Damage Reduction:</span>
+                        <span class="detail-value">48%</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Depth Strider III -->
+            <div class="enchantment-card rarity-uncommon" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🌊</div>
+                    <div class="enchantment-name">Depth Strider III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases movement speed underwater. Normal walking speed underwater for aquatic PvP combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Effect:</span>
+                        <span class="detail-value">Normal speed underwater</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soul Speed III -->
+            <div class="enchantment-card rarity-rare" data-armor="boots">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">👻</div>
+                    <div class="enchantment-name">Soul Speed III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases movement speed on soul sand and soul soil. 0.15 blocks per second speed increase for Nether PvP.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Speed Increase:</span>
+                        <span class="detail-value">+0.15 bps</span>
+                    </div>
+                    <div class="compatibility">
+                        <span class="compatibility-item">Boots</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const enchantmentCards = document.querySelectorAll('.enchantment-card');
+            const selectMessage = document.getElementById('selectMessage');
+            const helmetDisplay = document.getElementById('helmetDisplay');
+            const chestplateDisplay = document.getElementById('chestplateDisplay');
+            const leggingsDisplay = document.getElementById('leggingsDisplay');
+            const bootsDisplay = document.getElementById('bootsDisplay');
+
+            // Hide all enchantment cards by default
+            enchantmentCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hide the select message
+                    selectMessage.classList.add('hidden');
+                    
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Show/hide armor displays based on selection
+                    if (filter === 'helmet') {
+                        helmetDisplay.style.display = 'flex';
+                        chestplateDisplay.style.display = 'none';
+                        leggingsDisplay.style.display = 'none';
+                        bootsDisplay.style.display = 'none';
+                    } else if (filter === 'chestplate') {
+                        helmetDisplay.style.display = 'none';
+                        chestplateDisplay.style.display = 'flex';
+                        leggingsDisplay.style.display = 'none';
+                        bootsDisplay.style.display = 'none';
+                    } else if (filter === 'leggings') {
+                        helmetDisplay.style.display = 'none';
+                        chestplateDisplay.style.display = 'none';
+                        leggingsDisplay.style.display = 'flex';
+                        bootsDisplay.style.display = 'none';
+                    } else if (filter === 'boots') {
+                        helmetDisplay.style.display = 'none';
+                        chestplateDisplay.style.display = 'none';
+                        leggingsDisplay.style.display = 'none';
+                        bootsDisplay.style.display = 'flex';
+                    } else {
+                        helmetDisplay.style.display = 'none';
+                        chestplateDisplay.style.display = 'none';
+                        leggingsDisplay.style.display = 'none';
+                        bootsDisplay.style.display = 'none';
+                    }
+
+                    enchantmentCards.forEach(card => {
+                        const armorTypes = card.getAttribute('data-armor');
+                        if (armorTypes && armorTypes.includes(filter)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

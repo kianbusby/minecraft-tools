@@ -33,6 +33,19 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .title-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 8px;
         }
 
         .back-button {
@@ -119,6 +132,13 @@
                 font-size: 2rem;
                 margin-bottom: 15px;
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .title-image {
+                width: 50px;
+                height: 50px;
             }
             
             .subtitle {
@@ -231,7 +251,7 @@
     <div class="container">
         <div class="header">
             <a href="index.html" class="back-button">← Back to Menu</a>
-            <h1>🧪 Brewing Recipes</h1>
+            <h1><img src="Brewing_Stand_(empty)_JE10.png" alt="Brewing Stand" class="title-image"> Brewing Recipes</h1>
         </div>
 
         <div class="brewing-chart">

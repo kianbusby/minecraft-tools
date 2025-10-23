@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon Enchants - Minecraft Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2F4F2F;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .back-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .weapon-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .weapon-button {
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .weapon-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #A0522D;
+        }
+
+        .weapon-button.active {
+            background: linear-gradient(145deg, #32CD32, #228B22);
+            border-color: #006400;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .weapon-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .weapon-icon-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .weapon-title {
+            color: #8B4513;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .weapon-description {
+            color: #654321;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .select-message {
+            text-align: center;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .select-message.hidden {
+            display: none;
+        }
+
+        .enchantments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .enchantment-card {
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 3px solid #D2691E;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enchantment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #A0522D;
+        }
+
+        .enchantment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .enchantment-icon-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .enchantment-name {
+            color: #8B4513;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .enchantment-level {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: #8B4513;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: auto;
+            border: 2px solid #B8860B;
+        }
+
+        .enchantment-description {
+            color: #654321;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .enchantment-details {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #654321;
+        }
+
+        .rarity-common { border-left: 5px solid #808080; }
+        .rarity-uncommon { border-left: 5px solid #32CD32; }
+        .rarity-rare { border-left: 5px solid #4169E1; }
+        .rarity-epic { border-left: 5px solid #9932CC; }
+
+        .sword-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .sword-image {
+            width: 80px;
+            height: 80px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        .sword-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sword-info {
+            color: #2F4F2F;
+            text-align: left;
+        }
+
+        .sword-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .sword-description {
+            font-size: 1rem;
+            color: #654321;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .weapon-buttons {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .weapon-button {
+                padding: 25px;
+                min-height: 180px;
+            }
+            
+            .weapon-icon {
+                font-size: 2.5rem;
+            }
+            
+            .weapon-icon-img {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .weapon-title {
+                font-size: 1.5rem;
+            }
+            
+            .sword-display {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .sword-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .sword-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="pvp-enchants.html" class="back-button">← Back to PvP Enchants</a>
+            <h1>⚔️ Weapon Enchantments</h1>
+        </div>
+
+        <div class="weapon-buttons">
+            <button class="weapon-button" data-weapon="sword">
+                <div class="weapon-icon"><img src="Enchanted_Netherite_Sword.gif" alt="Netherite Sword" class="weapon-icon-img"></div>
+                <div class="weapon-title">Sword</div>
+            </button>
+
+            <button class="weapon-button" data-weapon="mace">
+                <div class="weapon-icon"><img src="Enchanted_Mace.gif" alt="Enchanted Mace" class="weapon-icon-img"></div>
+                <div class="weapon-title">Mace</div>
+            </button>
+
+            <button class="weapon-button" data-weapon="axe">
+                <div class="weapon-icon"><img src="Enchanted_Netherite_Axe.gif" alt="Enchanted Netherite Axe" class="weapon-icon-img"></div>
+                <div class="weapon-title">Axe</div>
+            </button>
+        </div>
+
+        <div class="select-message" id="selectMessage">
+            <strong>⚔️ Select a weapon type above to see the best enchantments!</strong><br>
+            Choose from Sword, Mace, or Axe to view recommended enchantments.
+        </div>
+
+        <div class="sword-display" id="swordDisplay" style="display: none;">
+            <div class="sword-image">
+                <img src="Enchanted_Netherite_Sword.gif" alt="Enchanted Netherite Sword">
+            </div>
+            <div class="sword-info">
+                <div class="sword-name">Netherite Sword</div>
+                <div class="sword-description">The ultimate sword for PvP combat with maximum damage and durability</div>
+            </div>
+        </div>
+
+        <div class="sword-display" id="maceDisplay" style="display: none;">
+            <div class="sword-image">
+                <img src="Enchanted_Mace.gif" alt="Enchanted Mace">
+            </div>
+            <div class="sword-info">
+                <div class="sword-name">Enchanted Mace</div>
+                <div class="sword-description">Heavy weapon with devastating damage and special enchantments</div>
+            </div>
+        </div>
+
+        <div class="sword-display" id="axeDisplay" style="display: none;">
+            <div class="sword-image">
+                <img src="Enchanted_Netherite_Axe.gif" alt="Enchanted Netherite Axe">
+            </div>
+            <div class="sword-info">
+                <div class="sword-name">Netherite Axe</div>
+                <div class="sword-description">Versatile weapon and tool with maximum efficiency and durability</div>
+            </div>
+        </div>
+
+        <div class="enchantments-grid" id="enchantmentsGrid" style="display: none;">
+            <!-- Sharpness V -->
+            <div class="enchantment-card rarity-common" data-weapon="sword">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon"><img src="Enchanted_Netherite_Sword.gif" alt="Netherite Sword" class="enchantment-icon-img"></div>
+                    <div class="enchantment-name">Sharpness V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases melee damage by 12.5 points. Essential for maximum damage output in PvP combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Increase:</span>
+                        <span class="detail-value">+12.5</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Sword, Axe</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fire Aspect II -->
+            <div class="enchantment-card rarity-uncommon" data-weapon="sword">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔥</div>
+                    <div class="enchantment-name">Fire Aspect II</div>
+                    <div class="enchantment-level">II</div>
+                </div>
+                <div class="enchantment-description">
+                    Sets enemies on fire when hit. Deals 2 hearts of fire damage over time, perfect for PvP pressure.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">II (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fire Duration:</span>
+                        <span class="detail-value">4 seconds</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Sword</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Looting III -->
+            <div class="enchantment-card rarity-rare" data-weapon="sword">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">💎</div>
+                    <div class="enchantment-name">Looting III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases mob drops significantly. 3x more drops from mobs, essential for farming rare items.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Drop Multiplier:</span>
+                        <span class="detail-value">3x</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Sword</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-weapon="sword">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases weapon durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-weapon="sword">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the weapon using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Density V OR Breach IV -->
+            <div class="enchantment-card rarity-rare" data-weapon="mace">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon"><img src="Enchanted_Mace.gif" alt="Enchanted Mace" class="enchantment-icon-img"></div>
+                    <div class="enchantment-name">Density V OR Breach IV</div>
+                    <div class="enchantment-level">V/IV</div>
+                </div>
+                <div class="enchantment-description">
+                    <strong>Density V:</strong> Increases mace damage significantly (+15 damage).<br>
+                    <strong>OR</strong><br>
+                    <strong>Breach IV:</strong> Ignores armor protection, dealing damage directly to health.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Mutually Exclusive:</span>
+                        <span class="detail-value">Yes - Choose One</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Density Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Breach Rarity:</span>
+                        <span class="detail-value">Epic</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Mace</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fire Aspect II -->
+            <div class="enchantment-card rarity-uncommon" data-weapon="mace">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔥</div>
+                    <div class="enchantment-name">Fire Aspect II</div>
+                    <div class="enchantment-level">II</div>
+                </div>
+                <div class="enchantment-description">
+                    Sets enemies on fire when hit. Deals 2 hearts of fire damage over time, perfect for PvP pressure.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">II (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Uncommon</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fire Duration:</span>
+                        <span class="detail-value">4 seconds</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Mace</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Windburst I -->
+            <div class="enchantment-card rarity-rare" data-weapon="mace">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">💨</div>
+                    <div class="enchantment-name">Windburst I</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Launches enemies into the air on hit. Creates distance and tactical advantage in PvP combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Launch Height:</span>
+                        <span class="detail-value">3 blocks</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Mace</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-weapon="mace">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases mace durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-weapon="mace">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the mace using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sharpness V -->
+            <div class="enchantment-card rarity-common" data-weapon="axe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon"><img src="Enchanted_Netherite_Axe.gif" alt="Enchanted Netherite Axe" class="enchantment-icon-img"></div>
+                    <div class="enchantment-name">Sharpness V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases melee damage by 12.5 points. Essential for maximum damage output in PvP combat.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Damage Increase:</span>
+                        <span class="detail-value">+12.5</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Sword, Axe</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Efficiency V -->
+            <div class="enchantment-card rarity-common" data-weapon="axe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">⚡</div>
+                    <div class="enchantment-name">Efficiency V</div>
+                    <div class="enchantment-level">V</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases mining speed significantly. 5x faster mining speed for efficient resource gathering.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">V (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Speed Increase:</span>
+                        <span class="detail-value">5x</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Axe, Pickaxe, Shovel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Silk Touch -->
+            <div class="enchantment-card rarity-rare" data-weapon="axe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🕸️</div>
+                    <div class="enchantment-name">Silk Touch</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Allows you to mine blocks in their original form. Perfect for collecting rare blocks and building materials.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Effect:</span>
+                        <span class="detail-value">Mines original blocks</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">Axe, Pickaxe, Shovel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unbreaking III -->
+            <div class="enchantment-card rarity-common" data-weapon="axe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">🔧</div>
+                    <div class="enchantment-name">Unbreaking III</div>
+                    <div class="enchantment-level">III</div>
+                </div>
+                <div class="enchantment-description">
+                    Increases axe durability significantly. 75% chance to not consume durability when used.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">III (Maximum)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Common</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Durability Chance:</span>
+                        <span class="detail-value">75%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mending -->
+            <div class="enchantment-card rarity-rare" data-weapon="axe">
+                <div class="enchantment-header">
+                    <div class="enchantment-icon">✨</div>
+                    <div class="enchantment-name">Mending</div>
+                    <div class="enchantment-level">I</div>
+                </div>
+                <div class="enchantment-description">
+                    Repairs the axe using experience orbs. Essential for maintaining your gear in PvP battles.
+                </div>
+                <div class="enchantment-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Level:</span>
+                        <span class="detail-value">I (Only Level)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity:</span>
+                        <span class="detail-value">Rare</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Repair Method:</span>
+                        <span class="detail-value">Experience Orbs</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Compatible With:</span>
+                        <span class="detail-value">All Weapons</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const weaponButtons = document.querySelectorAll('.weapon-button');
+            const enchantmentCards = document.querySelectorAll('.enchantment-card');
+            const selectMessage = document.getElementById('selectMessage');
+            const enchantmentsGrid = document.getElementById('enchantmentsGrid');
+            const swordDisplay = document.getElementById('swordDisplay');
+            const maceDisplay = document.getElementById('maceDisplay');
+            const axeDisplay = document.getElementById('axeDisplay');
+
+            // Hide all enchantment cards by default
+            enchantmentCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            weaponButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hide the select message
+                    selectMessage.classList.add('hidden');
+                    
+                    // Remove active class from all buttons
+                    weaponButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const weaponType = this.getAttribute('data-weapon');
+
+                    // Show/hide weapon displays based on selection
+                    if (weaponType === 'sword') {
+                        swordDisplay.style.display = 'flex';
+                        maceDisplay.style.display = 'none';
+                        axeDisplay.style.display = 'none';
+                    } else if (weaponType === 'mace') {
+                        swordDisplay.style.display = 'none';
+                        maceDisplay.style.display = 'flex';
+                        axeDisplay.style.display = 'none';
+                    } else if (weaponType === 'axe') {
+                        swordDisplay.style.display = 'none';
+                        maceDisplay.style.display = 'none';
+                        axeDisplay.style.display = 'flex';
+                    } else {
+                        swordDisplay.style.display = 'none';
+                        maceDisplay.style.display = 'none';
+                        axeDisplay.style.display = 'none';
+                    }
+
+                    // Show enchantments grid
+                    enchantmentsGrid.style.display = 'grid';
+
+                    enchantmentCards.forEach(card => {
+                        const weaponTypes = card.getAttribute('data-weapon');
+                        if (weaponTypes && weaponTypes.includes(weaponType)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Add some interactive effects
+            weaponButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(-5px) scale(1.02)';
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

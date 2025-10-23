@@ -84,6 +84,27 @@
             margin-right: 10px;
         }
 
+        .brewing-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .menu-icon-img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            background: transparent;
+            filter: contrast(1.2) brightness(1.1);
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -99,6 +120,17 @@
                 font-size: 1rem;
                 min-height: 60px;
             }
+            
+            .brewing-icon {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .menu-icon-img {
+                width: 20px;
+                height: 20px;
+            }
+            
         }
     </style>
 </head>
@@ -109,7 +141,7 @@
         
         <div class="menu-grid">
             <button class="menu-button" onclick="window.location.href='brewing.html'">
-                <span class="icon">🧪</span>
+                <img src="Brewing_Stand_(empty)_JE10.png" alt="Brewing Stand" class="brewing-icon">
                 Brewing Recipes
             </button>
             
@@ -124,7 +156,7 @@
             </button>
             
             <button class="menu-button" onclick="window.location.href='pvp-enchants.html'">
-                <span class="icon">⚔️</span>
+                <img src="Enchanted_Netherite_Sword.gif" alt="Netherite Sword" class="menu-icon-img">
                 PvP Enchants
             </button>
             
