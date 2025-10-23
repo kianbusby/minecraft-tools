@@ -5,37 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft Tools</title>
     <style>
-        body {
-            background-color: #ADD8E6;
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Courier New', monospace;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            text-align: center;
+            max-width: 800px;
             padding: 20px;
         }
 
         h1 {
-            color: #333;
-            text-align: center;
-            padding-top: 50px;
+            color: #2F4F2F;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
         }
 
-        p {
-            color: #555;
+        .subtitle {
+            color: #556B2F;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .menu-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 20px;
+            color: #FFF8DC;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            font-size: 18px;
+        }
+
+        .menu-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            border-color: #8B4513;
+        }
+
+        .menu-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .menu-button .icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .menu-button {
+                padding: 15px;
+                font-size: 1rem;
+                min-height: 60px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Minecraft Tools</h1>
-        <p>Everything you need to know about Minecraft</p>
+        <h1>⛏️ Minecraft Tools</h1>
+        <p class="subtitle">Everything you need to know about Minecraft</p>
+        
+        <div class="menu-grid">
+            <button class="menu-button" onclick="window.location.href='brewing.html'">
+                <span class="icon">🧪</span>
+                Brewing Recipes
+            </button>
+            
+            <button class="menu-button" onclick="window.location.href='nether-coords.html'">
+                <span class="icon">🔥</span>
+                Nether Coords Calculator
+            </button>
+            
+            <button class="menu-button" onclick="openTool('seed-map')">
+                <span class="icon">🗺️</span>
+                Seed Map
+            </button>
+            
+            <button class="menu-button" onclick="window.location.href='pvp-enchants.html'">
+                <span class="icon">⚔️</span>
+                PvP Enchants
+            </button>
+            
+            <button class="menu-button" onclick="openTool('enchantments')">
+                <span class="icon">✨</span>
+                Enchantments
+            </button>
+            
+            <button class="menu-button" onclick="openTool('calculator')">
+                <span class="icon">🧮</span>
+                Redstone Calculator
+            </button>
+        </div>
     </div>
+
+    <script>
+        function openTool(toolName) {
+            // Add visual feedback
+            event.target.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.target.style.transform = '';
+            }, 150);
+            
+            // Handle different tools
+            switch(toolName) {
+                case 'seed-map':
+                    alert('Seed Map - In Development! 🗺️\n\nThis feature is currently being worked on. It will help you find structures and locations in your Minecraft world using your seed.');
+                    break;
+                case 'enchantments':
+                    alert('Enchantments - Coming Soon! ✨\n\nAll enchantments with their effects and compatibility.');
+                    break;
+                case 'calculator':
+                    alert('Redstone Calculator - Coming Soon! 🧮\n\nCalculate redstone timings, signal strength, and circuit designs.');
+                    break;
+                default:
+                    alert('Tool not found!');
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.menu-button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.02)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

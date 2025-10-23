@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brewing Recipes - Minecraft Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2F4F2F;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .brewing-chart {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            overflow-x: auto;
+            border: 2px solid rgba(47, 79, 47, 0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .brewing-chart img {
+            max-width: 60%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            display: block;
+            margin: 0 auto;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: auto;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+            filter: contrast(1.3) saturate(1.2) brightness(1.1) sharpness(1.2);
+            border: 4px solid #2F4F2F;
+        }
+
+        .brewing-chart img:hover {
+            transform: scale(1.02);
+        }
+
+        .brewing-chart img:active {
+            transform: scale(1.05);
+        }
+
+        .coming-soon {
+            text-align: center;
+            color: #8B4513;
+            font-size: 1.2rem;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 15px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 20px;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            }
+            
+            .back-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+                margin-bottom: 20px;
+                font-weight: bold;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            }
+            
+            .brewing-chart {
+                padding: 25px;
+                margin: 20px 0;
+                max-width: 95%;
+                background: rgba(255, 255, 255, 0.25);
+                border: 3px solid rgba(47, 79, 47, 0.4);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            }
+            
+            .brewing-chart img {
+                max-width: 100%;
+                min-width: 350px;
+                border-radius: 10px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+                border: 4px solid #2F4F2F;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                image-rendering: pixelated;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                filter: contrast(1.4) saturate(1.3) brightness(1.15) sharpness(1.3);
+            }
+            
+            
+            .coming-soon {
+                font-size: 1rem;
+                padding: 20px;
+                margin: 20px 0;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                border: 1px solid rgba(139, 69, 19, 0.3);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 18px;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            }
+            
+            .back-button {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                margin-bottom: 18px;
+                font-weight: bold;
+            }
+            
+            .brewing-chart {
+                padding: 20px;
+                margin: 18px 0;
+                max-width: 98%;
+                background: rgba(255, 255, 255, 0.3);
+                border: 3px solid rgba(47, 79, 47, 0.5);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            }
+            
+            .brewing-chart img {
+                min-width: 320px;
+                border: 4px solid #2F4F2F;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                image-rendering: pixelated;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                filter: contrast(1.5) saturate(1.4) brightness(1.2) sharpness(1.4);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            }
+            
+            
+            .coming-soon {
+                font-size: 0.95rem;
+                padding: 15px;
+                margin: 18px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-button">← Back to Menu</a>
+            <h1>🧪 Brewing Recipes</h1>
+        </div>
+
+        <div class="brewing-chart">
+            <img src="Minecraft_brewing_en.webp" alt="Complete Brewing Guide for Minecraft 1.7.2 and 1.8">
+        </div>
+
+        <div class="coming-soon">
+            <p>More brewing recipes coming soon! 🧪</p>
+            <p>This page will include splash potions, lingering potions, and extended duration recipes.</p>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced mobile-friendly image interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('.brewing-chart img');
+            let isZoomed = false;
+            let touchStartTime = 0;
+            let isMobile = window.innerWidth <= 768;
+            
+            if (img) {
+                // Add visual feedback for mobile users
+                function showZoomFeedback(zoomed) {
+                    if (isMobile) {
+                        const feedback = document.createElement('div');
+                        feedback.style.cssText = `
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 20px;
+                            font-size: 14px;
+                            font-weight: bold;
+                            z-index: 1000;
+                            pointer-events: none;
+                        `;
+                        feedback.textContent = zoomed ? '🔍 Zoomed In - Double-tap to zoom out' : '📏 Zoomed Out - Double-tap to zoom in';
+                        document.body.appendChild(feedback);
+                        
+                        setTimeout(() => {
+                            document.body.removeChild(feedback);
+                        }, 2000);
+                    }
+                }
+                
+                // Double tap to zoom on mobile
+                img.addEventListener('dblclick', function(e) {
+                    e.preventDefault();
+                    if (isZoomed) {
+                        this.style.transform = 'scale(1)';
+                        this.style.cursor = 'zoom-in';
+                        this.style.transition = 'transform 0.3s ease';
+                        isZoomed = false;
+                        showZoomFeedback(false);
+                    } else {
+                        this.style.transform = 'scale(1.5)';
+                        this.style.cursor = 'zoom-out';
+                        this.style.transition = 'transform 0.3s ease';
+                        isZoomed = true;
+                        showZoomFeedback(true);
+                    }
+                });
+                
+                // Touch events for mobile
+                img.addEventListener('touchstart', function(e) {
+                    touchStartTime = Date.now();
+                    this.style.transition = 'none';
+                });
+                
+                img.addEventListener('touchend', function(e) {
+                    const touchDuration = Date.now() - touchStartTime;
+                    if (touchDuration > 500) { // Long press
+                        e.preventDefault();
+                        this.style.transition = 'transform 0.3s ease';
+                        if (isZoomed) {
+                            this.style.transform = 'scale(1)';
+                            this.style.cursor = 'zoom-in';
+                            isZoomed = false;
+                            showZoomFeedback(false);
+                        } else {
+                            this.style.transform = 'scale(1.5)';
+                            this.style.cursor = 'zoom-out';
+                            isZoomed = true;
+                            showZoomFeedback(true);
+                        }
+                    }
+                });
+                
+                // Add tap indicator for mobile
+                if (isMobile) {
+                    img.style.position = 'relative';
+                    img.addEventListener('touchstart', function() {
+                        this.style.opacity = '0.8';
+                    });
+                    img.addEventListener('touchend', function() {
+                        this.style.opacity = '1';
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
