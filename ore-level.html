@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ore Level Guide - Minecraft Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2C1810 0%, #8B4513 50%, #654321 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #FFF8DC;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #FFD700;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #DAA520;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .ore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .ore-card {
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 12px;
+            padding: 20px;
+            color: #FFF8DC;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
+        .ore-card:hover {
+            background: linear-gradient(145deg, #A0522D, #CD853F);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            border-color: #8B4513;
+        }
+
+        .ore-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .ore-level {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .ore-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: linear-gradient(145deg, #4A4A4A, #2C2C2C);
+            color: #FFD700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            border: 2px solid #FFD700;
+        }
+
+        .rarity-common { border-left: 5px solid #FFFFFF; }
+        .rarity-uncommon { border-left: 5px solid #00FF00; }
+        .rarity-rare { border-left: 5px solid #0080FF; }
+        .rarity-epic { border-left: 5px solid #8000FF; }
+        .rarity-legendary { border-left: 5px solid #FF8000; }
+
+        .info-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            color: #FFF8DC;
+        }
+
+        .info-section h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .ore-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .ore-card {
+                padding: 15px;
+            }
+            
+            .back-button {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Tools</a>
+        
+        <div class="header">
+            <h1>⛏️ Ore Level Guide</h1>
+            <p class="subtitle">Find the best Y levels to mine each ore in Minecraft</p>
+        </div>
+
+        <div class="info-section">
+            <h3>📊 How to Use This Guide</h3>
+            <p>Click on any ore card below to see detailed information about the best Y levels to mine that ore. The Y levels shown are the optimal ranges where you'll find the highest concentration of each ore type.</p>
+        </div>
+
+        <div class="ore-grid">
+            <!-- Coal Ore -->
+            <div class="ore-card rarity-common" onclick="showOreDetails('coal')">
+                <div class="ore-name">🪨 Coal Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 95</span></div>
+                <div class="ore-description">Most common ore, found in mountains and caves. Range: Y 0-320. Can be mined with any pickaxe.</div>
+            </div>
+
+            <!-- Iron Ore -->
+            <div class="ore-card rarity-common" onclick="showOreDetails('iron')">
+                <div class="ore-name">⚒️ Iron Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 15</span></div>
+                <div class="ore-description">Essential for tools and armor. Range: Y -64 to 320. Most abundant at Y 15 in deepslate layers.</div>
+            </div>
+
+            <!-- Copper Ore -->
+            <div class="ore-card rarity-common" onclick="showOreDetails('copper')">
+                <div class="ore-name">🟫 Copper Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 47</span></div>
+                <div class="ore-description">Used for redstone components and decorative blocks. Range: Y -16 to 112. Most common at Y 47.</div>
+            </div>
+
+            <!-- Gold Ore -->
+            <div class="ore-card rarity-rare" onclick="showOreDetails('gold')">
+                <div class="ore-name">🟨 Gold Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y -16</span></div>
+                <div class="ore-description">Rare ore, most abundant in deepslate layers. Range: Y -64 to 32. Peak generation at Y -16.</div>
+            </div>
+
+            <!-- Emerald Ore -->
+            <div class="ore-card rarity-legendary" onclick="showOreDetails('emerald')">
+                <div class="ore-name">💚 Emerald Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 236</span></div>
+                <div class="ore-description">Extremely rare! Only found in mountain biomes. Range: Y -16 to 320. Peak at Y 236.</div>
+            </div>
+
+            <!-- Lapis Lazuli Ore -->
+            <div class="ore-card rarity-rare" onclick="showOreDetails('lapis')">
+                <div class="ore-name">🔵 Lapis Lazuli Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y -32</span></div>
+                <div class="ore-description">Used for enchanting. Range: Y -64 to 64. Peak generation at Y -32.</div>
+            </div>
+
+            <!-- Redstone Ore -->
+            <div class="ore-card rarity-uncommon" onclick="showOreDetails('redstone')">
+                <div class="ore-name">🔴 Redstone Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y -59</span></div>
+                <div class="ore-description">Essential for redstone contraptions. Range: Y -64 to 15. Most common at Y -59.</div>
+            </div>
+
+            <!-- Diamond Ore -->
+            <div class="ore-card rarity-epic" onclick="showOreDetails('diamond')">
+                <div class="ore-name">💎 Diamond Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y -53</span></div>
+                <div class="ore-description">Most valuable ore! Range: Y -64 to 16. Best found at Y -53. Requires iron pickaxe or better.</div>
+            </div>
+
+            <!-- Amethyst -->
+            <div class="ore-card rarity-uncommon" onclick="showOreDetails('amethyst')">
+                <div class="ore-name">🟣 Amethyst</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 0</span></div>
+                <div class="ore-description">Found in amethyst geodes. Range: Y -64 to 64. Used for spyglasses and tinted glass.</div>
+            </div>
+
+            <!-- Nether Gold Ore -->
+            <div class="ore-card rarity-rare" onclick="showOreDetails('nether_gold')">
+                <div class="ore-name">🟡 Nether Gold Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 15 (Nether)</span></div>
+                <div class="ore-description">Nether variant of gold ore. Range: Y 10-117 (Nether). Better to find Nether Wastes or Crimson Forest biomes for more gold than strip mining.</div>
+            </div>
+
+            <!-- Nether Quartz Ore -->
+            <div class="ore-card rarity-uncommon" onclick="showOreDetails('quartz')">
+                <div class="ore-name">⚪ Nether Quartz Ore</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 15 (Nether)</span></div>
+                <div class="ore-description">Found in the Nether. Range: Y 10-117 (Nether). Better to find Nether Wastes or Crimson Forest biomes for more quartz than strip mining.</div>
+            </div>
+
+            <!-- Ancient Debris -->
+            <div class="ore-card rarity-legendary" onclick="showOreDetails('ancient_debris')">
+                <div class="ore-name">🟣 Ancient Debris</div>
+                <div class="ore-level">Best Y Level: <span class="level-badge">Y 15 (Nether)</span></div>
+                <div class="ore-description">Extremely rare! Range: Y 8-22 (Nether). Used to craft Netherite. Best found at Y 15.</div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>💡 Mining Tips</h3>
+            <ul style="margin-left: 20px; line-height: 1.6;">
+                <li><strong>Strip Mining:</strong> For diamonds, mine at Y -59 in a straight line with 2-block spacing</li>
+                <li><strong>Branch Mining:</strong> Create branches every 3 blocks for maximum efficiency</li>
+                <li><strong>Fortune Enchantment:</strong> Increases ore drops significantly</li>
+                <li><strong>Silk Touch:</strong> Allows you to move ore blocks without breaking them</li>
+                <li><strong>Beacon Mining:</strong> Use a beacon with Haste II for faster mining</li>
+                <li><strong>Nether Mining:</strong> Ancient Debris is blast-resistant, use beds or TNT for efficiency</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showOreDetails(oreType) {
+            const oreInfo = {
+                'coal': {
+                    name: 'Coal Ore',
+                    bestLevel: 'Y 95',
+                    description: 'Coal is the most common ore in Minecraft. It is most abundant at Y 95 in mountain biomes. Coal is essential for smelting and torches.',
+                    tips: ['Can be mined with any pickaxe', 'Most common in mountain biomes', 'Essential for early game fuel']
+                },
+                'iron': {
+                    name: 'Iron Ore',
+                    bestLevel: 'Y 15',
+                    description: 'Iron ore is crucial for progression. It is most abundant at Y 15 in deepslate layers. Iron is essential for tools, armor, and redstone components.',
+                    tips: ['Most abundant at Y 15', 'Found in deepslate layers', 'Required for iron pickaxe to mine diamonds']
+                },
+                'copper': {
+                    name: 'Copper Ore',
+                    bestLevel: 'Y 47',
+                    description: 'Copper ore was added in 1.17 and is used for redstone components and decorative blocks. It generates most commonly at Y 47 and is found in regular stone layers.',
+                    tips: ['Added in Caves & Cliffs update', 'Used for lightning rods and spyglasses', 'Can be crafted into copper blocks']
+                },
+                'gold': {
+                    name: 'Gold Ore',
+                    bestLevel: 'Y -16',
+                    description: 'Gold ore is rare and most abundant in the deepslate layers. It has peak generation at Y -16. Gold is used for powered rails, golden apples, and Netherite crafting.',
+                    tips: ['Most abundant at Y -16', 'Found in deepslate layers', 'Used for Netherite crafting']
+                },
+                'emerald': {
+                    name: 'Emerald Ore',
+                    bestLevel: 'Y 236',
+                    description: 'Emerald ore is extremely rare and only generates in mountain biomes. It has peak generation at Y 236 and is used for trading with villagers.',
+                    tips: ['Only found in mountain biomes', 'Extremely rare', 'Used for villager trading', 'Peak at Y 236']
+                },
+                'lapis': {
+                    name: 'Lapis Lazuli Ore',
+                    bestLevel: 'Y -32',
+                    description: 'Lapis lazuli ore is used for enchanting. It has peak generation at Y -32 and is found in deepslate layers. Essential for enchanting tables and books.',
+                    tips: ['Peak generation at Y -32', 'Used for enchanting', 'Drops 4-9 lapis with Fortune III']
+                },
+                'redstone': {
+                    name: 'Redstone Ore',
+                    bestLevel: 'Y -59',
+                    description: 'Redstone ore is essential for redstone contraptions. It generates most commonly at Y -59 in deepslate layers and is crucial for automation and complex builds.',
+                    tips: ['Essential for redstone contraptions', 'Most common at Y -59', 'Drops 4-5 redstone dust with Fortune III']
+                },
+                'diamond': {
+                    name: 'Diamond Ore',
+                    bestLevel: 'Y -53',
+                    description: 'Diamond ore is the most valuable ore in Minecraft! It generates most commonly at Y -53 and requires an iron pickaxe or better to mine. Essential for high-tier tools and armor.',
+                    tips: ['Most valuable ore in the game', 'Best found at Y -53', 'Requires iron pickaxe or better', 'Use Fortune III for maximum drops']
+                },
+                'amethyst': {
+                    name: 'Amethyst',
+                    bestLevel: 'Y 0',
+                    description: 'Amethyst is found in amethyst geodes that generate underground. It is most common at Y 0 and is used for spyglasses and tinted glass.',
+                    tips: ['Found in amethyst geodes', 'Used for spyglasses and tinted glass', 'Can be grown with amethyst buds', 'Generates in geodes']
+                },
+                'quartz': {
+                    name: 'Nether Quartz Ore',
+                    bestLevel: 'Y 15 (Nether)',
+                    description: 'Nether quartz ore is found exclusively in the Nether. It generates most commonly at Y 15 and is used for redstone components and decorative blocks. Better to find Nether Wastes or Crimson Forest biomes for more quartz than strip mining.',
+                    tips: ['Found only in the Nether', 'Used for redstone components', 'Can be mined with any pickaxe', 'Drops experience orbs', 'Better to find specific biomes than strip mining']
+                },
+                'nether_gold': {
+                    name: 'Nether Gold Ore',
+                    bestLevel: 'Y 15 (Nether)',
+                    description: 'Nether gold ore is the Nether variant of gold ore. It can be mined with any pickaxe and drops gold nuggets. Most abundant at Y 15 in the Nether. Better to find Nether Wastes or Crimson Forest biomes for more gold than strip mining.',
+                    tips: ['Nether variant of gold ore', 'Can be mined with any pickaxe', 'Drops gold nuggets', 'More common than overworld gold', 'Better to find specific biomes than strip mining']
+                },
+                'ancient_debris': {
+                    name: 'Ancient Debris',
+                    bestLevel: 'Y 15 (Nether)',
+                    description: 'Ancient debris is extremely rare and found only in the Nether. It generates most commonly at Y 15 and is used to craft Netherite ingots. It is blast-resistant.',
+                    tips: ['Extremely rare in the Nether', 'Best found at Y 15', 'Blast-resistant', 'Used for Netherite crafting', 'Use beds or TNT for efficient mining']
+                }
+            };
+
+            const ore = oreInfo[oreType];
+            if (ore) {
+                alert(`${ore.name}\n\nBest Y Level: ${ore.bestLevel}\n\nDescription: ${ore.description}\n\nTips:\n${ore.tips.map(tip => `• ${tip}`).join('\n')}`);
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.ore-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
