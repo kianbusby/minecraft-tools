@@ -102,6 +102,13 @@
             filter: contrast(1.2) brightness(1.1);
             border-radius: 4px;
             margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Chest hover effect */
+        .menu-button:hover .menu-icon-img[src="Chest.webp"] {
+            transform: scale(1.1);
+            filter: contrast(1.4) brightness(1.3);
         }
 
 
@@ -146,7 +153,7 @@
             </button>
             
             <button class="menu-button" onclick="window.location.href='nether-coords.html'">
-                <span class="icon">🔥</span>
+                <img src="nether-portal.webp" alt="Nether Portal" class="menu-icon-img">
                 Nether Coords Calculator
             </button>
             
@@ -161,12 +168,12 @@
             </button>
             
             <button class="menu-button" onclick="window.location.href='ore-level.html'">
-                <span class="icon">⛏️</span>
+                <img src="Diamond_Ore_JE3_BE3.webp" alt="Diamond Ore" class="menu-icon-img">
                 Ore Level
             </button>
             
             <button class="menu-button" onclick="window.location.href='redstone-calculator.html'">
-                <span class="icon">💎</span>
+                <img src="Chest.webp" alt="Minecraft Chest" class="menu-icon-img">
                 How to Obtain Items
             </button>
         </div>
